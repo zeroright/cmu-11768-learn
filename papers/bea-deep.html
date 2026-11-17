@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Building Effective Agents 深度精读：Anthropic 的工程经验</title>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css"/><link rel="stylesheet" href="../css/site.css"/>
+<script src="../vendor/marked.min.js"></script><script src="../js/site-shell.js"></script><script src="../js/app.js"></script>
+<script src="../data/meta.js"></script><link rel="stylesheet" href="../css/learning.css"/></head>
+<body><a class="skip-link" href="#mainContent">跳到主要内容</a><header class="topbar"></header>
+<div class="layout"><main class="main" id="mainContent">
+<section class="hero"><span class="eyebrow">论文精读 · L15</span><h1>Building Effective Agents 深度精读：Anthropic 的工程经验</h1><p class="muted">Anthropic Engineering, Dec 2024</p></section>
+<section class="section"><h2>workflow vs agent</h2><p>workflow 是预设代码路径（deterministic pipeline），agent 是让 LLM 自主决定下一步。Anthropic 强调：能用 workflow 就别用 agent——agent 是「当 workflow 撑不起来时的最后手段」。这条原则反直觉但极其重要。</p></section>
+<section class="section"><h2>五种 workflow 模式</h2><p>prompt chaining（子任务串行）/ routing（分类到不同 handler）/ parallelization（同时多调用再合并）/ orchestrator-workers（分解 + 委派）/ evaluator-optimizer（生成 + 反思改进）。这五种覆盖了 80% 的实际场景。</p></section>
+<section class="section"><h2>autonomous agent 何时才需要</h2><p>当任务真的无法预知下一步（如开放探索、长程问题、多轮交互），才需要 agent。Anthropic 建议：(1) 用「agent loop = LLM + tool + env」的最小骨架；(2) 让 env 提供清晰反馈；(3) 让模型能停止；(4) 给监控留好 hook。</p></section>
+<section class="section"><h2>工程细节</h2><p>文档建议关注 tool design（简单清晰 > 强大复杂）、error message（让错误可读）、budget guardrail（不要无界循环）、human oversight（关键决策人介入）。这些细节决定了 agent 能不能生产化。</p></section>
+<section class="section"><h2>对 L15 编排监控的连接</h2><p>workflow 模式对应 LangGraph/状态机；agent 部分对应 L14 OpenHands；监控部分对应 L15 Hodoscope/Docent。Building Effective Agents 是把三者连起来的工程总纲。</p></section>
+<section class="section"><h2>怎么读它</h2><p>这是工业界最有影响力的 agent 工程文。读它不要记「workflow vs agent」的术语，要记「先 workflow，后 agent，agent 留 human oversight」的取舍逻辑。</p></section>
+
+<p class="muted" style="margin-top:2rem"><a href="../papers.html">← 返回论文库</a></p>
+</main></div>
+</body></html>

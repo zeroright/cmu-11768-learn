@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>GRPO / DeepSeekMath 深度精读：组内相对优势</title>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css"/><link rel="stylesheet" href="../css/site.css"/>
+<script src="../vendor/marked.min.js"></script><script src="../js/site-shell.js"></script><script src="../js/app.js"></script>
+<script src="../data/meta.js"></script><link rel="stylesheet" href="../css/learning.css"/></head>
+<body><a class="skip-link" href="#mainContent">跳到主要内容</a><header class="topbar"></header>
+<div class="layout"><main class="main" id="mainContent">
+<section class="hero"><span class="eyebrow">论文精读 · L09 / L11</span><h1>GRPO / DeepSeekMath 深度精读：组内相对优势</h1><p class="muted">Shao et al., 2024 · arXiv 2402.03300</p></section>
+<section class="section"><h2>动机：PPO 的 critic 太重</h2><p>PPO 需要 actor（policy）+ critic（value model）+ reward model 三个模型。对于 LLM 这种几十 B 参数的网络，critic 单独占用一份显存 + 训练成本。GRPO 的问法很直接：能不能不训 critic，用「同 prompt 其他样本」当 baseline？</p></section>
+<section class="section"><h2>公式：A_i = (r_i - mean(r)) / std(r)</h2><p>给定一个 prompt，采样 G 个 rollout 得 rewards [r1..rG]；每个样本的 advantage 就是它相对组内均值的标准化距离。这一步省掉了 value model 的全部成本，而且天然给了「这组样本里相对好/相对坏」的信号。</p></section>
+<section class="section"><h2>为什么对 agent 任务更友好</h2><p>agent 任务的 reward 通常只在轨迹末端给 0/1（任务成败），传统 PPO 的 critic 很难学准「这一 step 值多少」。GRPO 跳过 step-level 信用分配，用「整组里我这个轨迹是不是更好」作为信号，反而更适合长 trajectory + 稀疏 reward。</p></section>
+<section class="section"><h2>DAPO/GSPO 的工程修正</h2><p>GRPO 的原始版本在长 CoT 上不稳：一是 group 内全 0 或全 1 reward 时 advantage 全 0；二是 token-level IS 比在长链路上误差累积。DAPO 用 dynamic sampling 剔除无效组 + token-level loss + 过长惩罚；GSPO 换成 sequence-level importance sampling。</p></section>
+<section class="section"><h2>实践要点</h2><p>1) group size 不能太小（一般 ≥8），否则 advantage 估计噪声大；2) 需要 rejection sampling 或 rejection-aware 采样，保证组里有 reward 变化；3) reward 设计决定一切——用可验证规则（测试通过/答案正确）比 generative RM 稳得多；4) MoE 模型要警惕 rollout 中 expert 路由不一致导致的隐性 off-policy（R3 论文专门讨论）。</p></section>
+<section class="section"><h2>怎么读它</h2><p>先懂「组内相对」四个字，再去推公式。它和 PPO 的差别不是「性能更高」，而是「简化到能跑得动」。读的时候对照 L11 的 DAPO/GSPO 修正一起看，能理解工程取舍。</p></section>
+
+<p class="muted" style="margin-top:2rem"><a href="../papers.html">← 返回论文库</a></p>
+</main></div>
+</body></html>

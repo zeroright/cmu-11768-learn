@@ -28,6 +28,14 @@
 <section class="section"><h2>期末项目</h2><p>用学到的能力整合到一个自己选的任务上：可以是新 benchmark、改进现有方法、或者部署一个真正可用的 agent 系统。详细要求见官方 <a href="https://www.cmu-agents.com" target="_blank" rel="noopener">课程站</a> 与 Canvas。</p></section>
 
 <section class="section"><h2>本站补充</h2>
-<p>对应的可运行示例（tool call 解析、ReAct、上下文压缩、SWE 反馈环、记忆路由、GRPO 优势、CUA 步骤日志等）在 <a href="code-compare.html">源码对照</a> 中提供可编辑运行；机制实验见 <a href="learning-lab.html">机制实验</a>；综合项目模板见 <a href="assignments.html">综合项目</a>。</p></section>
+<p>对应的可运行示例（tool call 解析、ReAct、上下文压缩、SWE 反馈环、记忆路由、GRPO 优势、CUA 步骤日志等）在 <a href="code-compare.html">源码对照</a> 中提供可编辑运行；机制实验见 <a href="learning-lab.html">机制实验</a>；综合项目模板见 <a href="assignments.html">综合项目</a>。</p>
+
+<p><b>三次作业 starter code</b>（本站提供可运行骨架；把 MockLLM/ToyEnv/ToyPolicy 换成真实 LLM/环境/模型即可按课程要求扩展）：</p>
+<ul>
+<li><a href="code-compare.html?ex=hw1_agent_harness.py"><code>examples/hw1_agent_harness.py</code></a> — 最小 agent loop：tool schema、dispatch、observation 回写（L01-L05 对应）</li>
+<li><a href="code-compare.html?ex=hw2_agent_eval.py"><code>examples/hw2_agent_eval.py</code></a> — 任务集 + scorer + 成功率/成本报告（L06-L10 对应）</li>
+<li><a href="code-compare.html?ex=hw3_agent_training.py"><code>examples/hw3_agent_training.py</code></a> — rejection sampling + SFT + GRPO 组相对优势玩具循环（L08-L12 对应）</li>
+</ul>
+</section>
 </main></div>
 </body></html>

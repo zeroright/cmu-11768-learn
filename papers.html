@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       <td>${p.lecture}</td>
       <td>${(p.topics||[]).join(', ')}</td>
       <td>${bits.join(' · ')||'—'}</td>
-      <td><a href="${href}">打开精读</a></td></tr>`;
+      <td>${p.deep?'<a href="${p.deep}">深度精读</a> · ':''}<a href="${href}">讲次页</a></td></tr>`;
     }).join('') || '<tr><td colspan="5">无匹配</td></tr>';
   }
   const preset=new URLSearchParams(location.search).get('lecture');

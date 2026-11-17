@@ -265,13 +265,15 @@ window.SITE_META = {
       "lecture": "L01",
       "title": "Toolformer",
       "url": "https://arxiv.org/abs/2302.04761",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/react-deep.html"
     },
     {
       "lecture": "L01",
       "title": "ReAct",
       "url": "https://arxiv.org/abs/2210.03629",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/react-deep.html"
     },
     {
       "lecture": "L02",
@@ -289,7 +291,8 @@ window.SITE_META = {
       "lecture": "L02",
       "title": "Toolformer",
       "url": "https://arxiv.org/abs/2302.04761",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/react-deep.html"
     },
     {
       "lecture": "L02",
@@ -421,7 +424,8 @@ window.SITE_META = {
       "lecture": "L03",
       "title": "PagedAttention / vLLM",
       "url": "https://arxiv.org/abs/2309.06180",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/pagedattention-deep.html"
     },
     {
       "lecture": "L03",
@@ -433,7 +437,8 @@ window.SITE_META = {
       "lecture": "L03",
       "title": "MemGPT",
       "url": "https://arxiv.org/abs/2310.08560",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/pagedattention-deep.html"
     },
     {
       "lecture": "L03",
@@ -451,7 +456,8 @@ window.SITE_META = {
       "lecture": "L04",
       "title": "MemGPT",
       "url": "https://arxiv.org/abs/2310.08560",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/pagedattention-deep.html"
     },
     {
       "lecture": "L04",
@@ -841,7 +847,8 @@ window.SITE_META = {
       "lecture": "L06",
       "title": "SWE-bench",
       "url": "https://arxiv.org/abs/2310.06770",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/openhands-sdk-deep.html"
     },
     {
       "lecture": "L06",
@@ -865,13 +872,15 @@ window.SITE_META = {
       "lecture": "L06",
       "title": "Multi-SWE-bench",
       "url": "https://arxiv.org/abs/2504.02605",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/openhands-sdk-deep.html"
     },
     {
       "lecture": "L06",
       "title": "SWE-bench Multimodal",
       "url": "https://arxiv.org/abs/2410.03859",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/openhands-sdk-deep.html"
     },
     {
       "lecture": "L06",
@@ -973,7 +982,8 @@ window.SITE_META = {
       "lecture": "L07",
       "title": "ReAct",
       "url": "https://arxiv.org/abs/2210.03629",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/react-deep.html"
     },
     {
       "lecture": "L07",
@@ -1075,7 +1085,8 @@ window.SITE_META = {
       "lecture": "L09",
       "title": "DeepSeekMath",
       "url": "https://arxiv.org/abs/2402.03300",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/grpo-deep.html"
     },
     {
       "lecture": "L09",
@@ -1183,7 +1194,8 @@ window.SITE_META = {
       "lecture": "L10",
       "title": "DeepSeekMath",
       "url": "https://arxiv.org/abs/2402.03300",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/grpo-deep.html"
     },
     {
       "lecture": "L11",
@@ -1219,13 +1231,15 @@ window.SITE_META = {
       "lecture": "L11",
       "title": "Proximal Policy Optimization (PPO)",
       "url": "https://arxiv.org/abs/1707.06347",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/grpo-deep.html"
     },
     {
       "lecture": "L11",
       "title": "DeepSeekMath (GRPO)",
       "url": "https://arxiv.org/abs/2402.03300",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/grpo-deep.html"
     },
     {
       "lecture": "L11",
@@ -1279,7 +1293,8 @@ window.SITE_META = {
       "lecture": "L13",
       "title": "AgentDojo",
       "url": "https://arxiv.org/abs/2406.13352v3",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/agentdojo-deep.html"
     },
     {
       "lecture": "L13",
@@ -1333,7 +1348,8 @@ window.SITE_META = {
       "lecture": "L14",
       "title": "OpenHands Software Agent SDK report",
       "url": "https://arxiv.org/abs/2511.03690v1",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/openhands-sdk-deep.html"
     },
     {
       "lecture": "L14",
@@ -1345,7 +1361,8 @@ window.SITE_META = {
       "lecture": "L14",
       "title": "SWE-bench",
       "url": "https://arxiv.org/abs/2310.06770v1",
-      "arxiv": "arXiv"
+      "arxiv": "arXiv",
+      "deep": "papers/openhands-sdk-deep.html"
     },
     {
       "lecture": "L14",
@@ -1388,6 +1405,52 @@ window.SITE_META = {
       "title": "Multi-Agent Computer Use (MACU)",
       "url": "https://arxiv.org/abs/2606.01533",
       "arxiv": "arXiv"
+    }
+  ],
+  "examples": [
+    {
+      "file": "tool_call_parse.py",
+      "title": "工具调用解析与分发"
+    },
+    {
+      "file": "react_loop.py",
+      "title": "ReAct 循环"
+    },
+    {
+      "file": "context_compact.py",
+      "title": "上下文压缩与硬约束 pin"
+    },
+    {
+      "file": "memory_skill_router.py",
+      "title": "记忆 vs 技能路由"
+    },
+    {
+      "file": "plan_and_act.py",
+      "title": "Plan-and-Execute 循环"
+    },
+    {
+      "file": "swe_patch_loop.py",
+      "title": "SWE-bench 补丁闭环"
+    },
+    {
+      "file": "grpo_advantage.py",
+      "title": "GRPO 组相对优势"
+    },
+    {
+      "file": "cua_step_log.py",
+      "title": "CUA 步骤日志与风险门"
+    },
+    {
+      "file": "hw1_agent_harness.py",
+      "title": "HW1: agent harness 骨架"
+    },
+    {
+      "file": "hw2_agent_eval.py",
+      "title": "HW2: agent 评测 harness"
+    },
+    {
+      "file": "hw3_agent_training.py",
+      "title": "HW3: SFT+GRPO 训练循环"
     }
   ]
 };

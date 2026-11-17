@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OpenHands SDK 深度精读：工业级 coding agent 的分层</title>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css"/><link rel="stylesheet" href="../css/site.css"/>
+<script src="../vendor/marked.min.js"></script><script src="../js/site-shell.js"></script><script src="../js/app.js"></script>
+<script src="../data/meta.js"></script><link rel="stylesheet" href="../css/learning.css"/></head>
+<body><a class="skip-link" href="#mainContent">跳到主要内容</a><header class="topbar"></header>
+<div class="layout"><main class="main" id="mainContent">
+<section class="hero"><span class="eyebrow">论文精读 · L06 / L14</span><h1>OpenHands SDK 深度精读：工业级 coding agent 的分层</h1><p class="muted">OpenHands Team, 2025 · arXiv 2511.03690</p></section>
+<section class="section"><h2>为什么是 OpenHands</h2><p>它不是论文，而是工程报告：把 agent 拆成可以独立测试、独立替换的部件——controller、agent、runtime、skills、observation。这种「部件解耦」是工业级 agent 与研究原型的根本差别。</p></section>
+<section class="section"><h2>Controller：step → action → observation 循环</h2><p>controller 负责 driver loop：把 task 给 agent，agent 返回 action（bash/edit/browse/...），controller 在 runtime 里执行，把结果包装成 observation 给 agent。整个 loop 有超时、预算、retry、interrupt。</p></section>
+<section class="section"><h2>Runtime：docker 化 sandbox</h2><p>每次任务起一个独立容器；文件系统、网络、进程都被隔离；skills 通过事件源（event-sourced）与 runtime 通信，便于审计与回放。是 L13 安全设计的具体落地。</p></section>
+<section class="section"><h2>Skills：可调用 Python 函数式技能</h2><p>AgentSkills 把「打开文件」「运行测试」「读 issue」等封装成带 schema 的函数，让模型像调 tool call 一样调它们。比直接给 bash 更可控，比 GUI 更抽象。</p></section>
+<section class="section"><h2>Observation 的类型化</h2><p>CmdOutputObservation / BrowserObservation / AgentStateObservation：每种 env 反馈结构化成一个类型，便于 controller 做 retry/终止判断、监控做行为簇分类（L15 Hodoscope 类工作）。</p></section>
+<section class="section"><h2>怎么读它</h2><p>不要当论文读，当「设计图」读。对着它的 controller-runtime-agent-skill 分层，问自己：你的 agent 项目里 controller 是谁？runtime 是不是 docker？skills 是不是函数？observation 是不是类型化？四层缺一层，工程就不完整。</p></section>
+
+<p class="muted" style="margin-top:2rem"><a href="../papers.html">← 返回论文库</a></p>
+</main></div>
+</body></html>
