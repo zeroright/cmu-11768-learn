@@ -46,12 +46,12 @@
       try{ta.value=localStorage.getItem(k)||'';}catch(e){}
       ta.oninput=()=>{try{localStorage.setItem(k,ta.value);}catch(e){}};
       container.querySelector('#crPrev').disabled=(i===0);
-      container.querySelector('#crNext').textContent=(i===scenes.length-1?'完成':'下一幕 →');
+      container.querySelector('#crNext').textContent=(i===scenes.length-1?'完成本讲':'下一幕 →');
       markStep();
     }
     container.querySelector('#crPrev').onclick=()=>{i=Math.max(0,i-1);draw();};
     container.querySelector('#crNext').onclick=()=>{i=Math.min(scenes.length,i+1);draw();};
-    container.querySelectorAll('[data-kp]').forEach(b=>b.onclick=()=>{TUTOR.setMastery(b.dataset.kp,+b.dataset.lv);b.parentElement.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));});
+    container.querySelectorAll('[data-kp]').forEach(b=>b.onclick=()=>{TUTOR.setMastery(b.dataset.kp,+b.dataset.lv);b.parentElement.querySelectorAll('button').forEach(x=>{x.setAttribute('aria-pressed',x===b?'true':'false');x.style.background=x===b?'var(--brand)':'var(--bg2)';x.style.color=x===b?'#fff':'var(--muted)';});});
     draw();
   }
   /* overlay for lecture pages */
@@ -60,8 +60,7 @@
     const o=document.createElement('div');o.id='crOverlay';o.className='cr-overlay';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label',lec+' 互动课堂');
     o.innerHTML=`<div class="cr-sheet"><div class="cr-top"><div><b>${lec} 互动课堂</b><span class="muted">讲→问→做→回忆 · 只存本机</span></div><button type="button" class="iconbtn" id="crClose" aria-label="关闭">✕</button></div><div class="cr-mount"></div></div>`;
     document.body.appendChild(o);
-    document.body.style.overflow='hidden';
-    const close=()=>{o.remove();document.body.style.overflow='';document.removeEventListener('keydown',onKey);};
+    const close=()=>{o.remove();document.removeEventListener('keydown',onKey);};
     const onKey=e=>{if(e.key==='Escape')close();};
     document.addEventListener('keydown',onKey);
     o.querySelector('#crClose').onclick=close;

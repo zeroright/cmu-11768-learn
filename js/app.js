@@ -85,11 +85,13 @@
       nav.setAttribute('aria-label','面包屑');
       nav.innerHTML='<a href="../index.html">首页</a><span class="sep">/</span><a href="../learning-path.html">学习路径</a><span class="sep">/</span><span>'+id+'</span>';
       main.insertBefore(nav, main.firstChild);
-    }    if(!main.querySelector('.cr-launch')){
-      const bar=document.createElement('div');bar.className='cr-launch';
-      bar.innerHTML='<button type="button" class="btn sm" id="crOpen" title="讲→问→做→回忆 4 幕课堂">🎓 互动课堂</button><a class="btn ghost sm" href="../classroom.html?lec='+id+'">独立页 →</a>';
-      const crumbs=main.querySelector('.crumbs');crumbs?crumbs.after(bar):main.insertBefore(bar,main.firstChild);
-      bar.querySelector('#crOpen').onclick=()=>{if(window.CR)CR.openOverlay(id);else location.href='../classroom.html?lec='+id;};
+    }
+    if(!document.getElementById('crFab')){
+      const fab=document.createElement('button');fab.id='crFab';fab.type='button';fab.className='cr-fab';
+      fab.title='互动课堂 · 讲→问→做→回忆';fab.setAttribute('aria-label','打开本讲互动课堂');
+      fab.innerHTML='🎓';
+      fab.onclick=()=>{if(window.CR)CR.openOverlay(id);else location.href='../classroom.html?lec='+id;};
+      document.body.appendChild(fab);
     }
 
     if(!document.getElementById('lecturePagerEnd')){

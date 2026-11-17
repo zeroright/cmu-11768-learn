@@ -10,7 +10,9 @@
 <script src="data/meta.js"></script>
 <script src="data/tutor.js"></script>
 <script src="data/classroom.js"></script>
+<script src="js/classroom-engine.js"></script>
 <script defer src="js/tutor.js"></script>
+<script>document.addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('crOverlayBtn');if(b)b.onclick=()=>CR.openOverlay('L01');});</script>
 </head>
 <body>
 <a class="skip-link" href="#mainContent">跳到主要内容</a>
@@ -18,7 +20,7 @@
 <div class="layout">
 <main class="main" id="mainContent">
 <section class="hero"><span class="eyebrow">MASTERY / 本站自编辅导层</span><h1>把「读过」变成「会用」。<br>DeepTutor 式掌握度与复习。</h1><p>每讲的知识点自评 + 间隔复习 + 弱点清单。数据只存在你的浏览器。</p></section>
-<div class="classroom-banner"><div><b>先测后学更有效：</b>先给每个知识点打分，再看哪一讲该回头。</div><a class="btn" href="classroom.html">进入互动课堂 →</a></div>
+<div class="classroom-banner"><div><b>先测后学更有效：</b>先给每个知识点打分，再看哪一讲该回头。</div><div class="actions" style="display:flex;gap:8px"><a class="btn ghost sm" href="classroom.html">独立页 →</a><button type="button" class="btn sm" id="crOverlayBtn">全屏课堂</button></div></div>
 <div id="masteryBoard"></div>
 <h2 style="margin-top:28px">推荐 6 周节奏</h2>
 <div id="tutorPlan"></div>
