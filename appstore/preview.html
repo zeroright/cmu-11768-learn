@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>CMU11768 自学站 · iOS 交互预览</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#1a1d26;--muted:#5c6578;--brand:#2563eb;--brand2:#7c3aed;--border:#e2e6ef}
+*{box-sizing:border-box}
+body{margin:0;padding:28px;background:var(--bg);color:var(--text);font:15px/1.65 system-ui,-apple-system,Segoe UI,PingFang SC,sans-serif}
+h1{margin:0 0 6px;font-size:24px}
+p.sub{margin:0 0 24px;color:var(--muted)}
+.stage{display:flex;gap:28px;flex-wrap:wrap;justify-content:flex-start}
+.phone{width:390px;height:844px;background:#000;border-radius:54px;padding:12px;box-shadow:0 24px 60px rgba(15,23,42,.28);flex:none}
+.screen{height:100%;border-radius:44px;overflow:hidden;background:var(--card);display:flex;flex-direction:column}
+.status{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:12px;font-weight:600;color:var(--text);flex:none}
+.status .batt{width:22px;height:11px;border:1.5px solid var(--text);border-radius:3px;position:relative}
+.status .batt::after{content:'';position:absolute;right:-4px;top:3px;width:2px;height:5px;background:var(--text)}
+.top{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--border);flex:none;background:rgba(255,255,255,.9)}
+.top .brand{font-weight:800;font-size:15px}
+.top .brand span{color:var(--brand2)}
+.top .icons{display:flex;gap:8px}
+.top .icons span{font-size:15px}
+.body{flex:1;overflow:auto;padding:14px 16px}
+.hero{border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;background:linear-gradient(135deg,rgba(37,99,235,.09),rgba(124,58,237,.09))}
+.hero .eyebrow{font-size:10.5px;font-weight:800;color:var(--brand);letter-spacing:.08em;text-transform:uppercase}
+.hero h2{margin:6px 0 4px;font-size:19px;line-height:1.3}
+.hero p{margin:0;color:var(--muted);font-size:12.5px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 4px 16px rgba(16,24,40,.05)}
+.card h3{margin:0 0 8px;font-size:14.5px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;border-radius:12px;font-weight:700;font-size:13.5px;border:none;cursor:pointer}
+.btn.primary{background:var(--brand);color:#fff}
+.btn.ghost{background:var(--card);color:var(--brand);border:1px solid var(--border)}
+.row{display:flex;gap:10px;align-items:center}
+.row.between{justify-content:space-between}
+.list{list-style:none;margin:0;padding:0}
+.list li{padding:11px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:13.5px}
+.list li:last-child{border:none}
+.list .code{font-weight:800;min-width:40px}
+.muted{color:var(--muted);font-size:12px}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:700;background:#eef2ff;color:#3730a3}
+.pill.ok{background:#d1fae5;color:#065f46}
+.pill.warn{background:#fef3c7;color:#92400e}
+.bar{height:8px;border-radius:999px;background:var(--border);overflow:hidden;flex:1}
+.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+.steps{display:flex;justify-content:center;gap:8px;margin:14px 0;font-size:11px}
+.step{padding:5px 12px;border-radius:999px;background:#eef2ff;color:#3730a3;font-weight:700}
+.step.cur{background:var(--brand);color:#fff}
+.step.done{background:#d1fae5;color:#065f46}
+.scene{border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
+.scene-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.scene-type{font-size:11px;font-weight:800;color:var(--brand);background:rgba(37,99,235,.1);padding:4px 10px;border-radius:999px}
+.scene-title{font-size:15px;font-weight:800}
+.scene-body{font-size:13.5px;line-height:1.7;margin:0 0 12px}
+.choice{display:block;width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:12px;background:var(--card);text-align:left;font-size:13px;margin-bottom:8px;cursor:pointer}
+.choice.picked{border-color:var(--brand);background:rgba(37,99,235,.08)}
+.textarea{width:100%;min-height:60px;padding:10px;border:1px solid var(--border);border-radius:10px;font:inherit;font-size:13px;resize:none}
+.fab{position:absolute;right:22px;bottom:88px;width:52px;height:52px;border-radius:999px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(37,99,235,.35)}
+.overlay{position:absolute;inset:0;background:rgba(10,15,30,.5);display:flex;align-items:center;justify-content:center;padding:14px}
+.sheet{width:100%;height:88%;background:var(--card);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.sheet-top{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid var(--border);flex:none}
+.sheet-top b{font-size:14px}
+.close{font-size:20px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center}
+.stat .n{font-size:20px;font-weight:800}
+.stat .l{font-size:10.5px;color:var(--muted)}
+.tabbar{height:60px;border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;background:var(--card);flex:none}
+.tabbar span{font-size:22px;color:var(--muted)}
+.tabbar span.cur{color:var(--brand)}
+.home-ind{height:5px;width:130px;border-radius:999px;background:#000;margin:8px auto 4px;flex:none}
+.caption{width:390px;text-align:center;margin-top:8px;font-size:12.5px;color:var(--muted);flex:none}
+.slide{border-radius:14px;overflow:hidden;border:1px solid var(--border);margin-bottom:10px}
+.slide img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
+.credit{font-size:10.5px;color:var(--muted);margin-top:4px}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl td{padding:9px 4px;border-bottom:1px solid var(--border);vertical-align:top}
+.tbl td:first-child{font-weight:800;white-space:nowrap}
+.kp{display:flex;gap:8px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+.kp:last-child{border:none}
+.dot{width:10px;height:10px;border-radius:999px;margin-top:4px;flex:none}
+.kp small{display:block;color:var(--muted);font-size:11.5px}
+.switch{width:44px;height:26px;border-radius:999px;background:#cbd5e1;position:relative;flex:none}
+.switch::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:999px;background:#fff;transition:left .2s}
+.switch.on{background:var(--ok)}.switch.on::after{left:21px}
+.tag{font-size:10.5px;padding:2px 8px;border-radius:6px;background:#f1f5f9;color:#475569;font-weight:700}
+</style>
+</head>
+<body>
+<h1>CMU11768 自学站 · iOS 交互预览</h1>
+<p class="sub">以下均为静态预览图，还原 iPhone 15 Pro（390×844）下的主要界面与交互状态。实际打包为 Capacitor WKWebView，数据全部本地存储。</p>
+
+<div class="stage">
+
+<!-- 1. 首页 -->
+<div><div class="phone"><div class="screen">
+  <div class="status"><span>9:41</span><span>📶 🔋 <span class="batt"></span></span></div>
+  <div class="top"><div class="brand">CMU11768 <span>自学站</span></div><div class="icons"><span>◐</span><span>⛓</span></div></div>
+  <div class="body">
+    <div class="hero"><span class="eyebrow">LEARNING PATH</span><h2>按目标学习，<br>带着结果进入下一阶段。</h2><p>先选择路线，再完成每阶段的阅读、实验和验收。</p></div>
+    <div class="card"><div class="row between"><div><b style="font-size:14px">继续学习</b><div class="muted">L02 · Agent 能力 1：工具使用</div></div><span class="pill warn">待学习</span></div>
+    <div class="row" style="margin-top:10px"><div class="bar"><span style="width:13%"></span></div><span class="muted">2/15</span></div></div>
+    <div class="card"><h3>本周节奏</h3><ul class="list"><li><span><b>L01</b> 什么是 Agent</span><span class="pill ok">已读</span></li><li><span><b>L02</b> 工具使用</span><span class="pill warn">进行中</span></li><li><span><b>L03</b> 长上下文管理</span><span class="pill">未开始</span></li></ul></div>
+    <div class="grid2">
+      <div class="card" style="margin:0;text-align:center"><div style="font-size:26px">🎓</div><b style="font-size:13px">互动课堂</b><div class="muted">4 幕模式</div></div>
+      <div class="card" style="margin:0;text-align:center"><div style="font-size:26px">📊</div><b style="font-size:13px">掌握度</b><div class="muted">28 知识点</div></div>
+    </div>
+  </div>
+  <div class="tabbar"><span class="cur">⌂</span><span>⌗</span><span>◉</span><span>☰</span></div>
+  <div class="home-ind"></div>
+</div></div><p class="caption">① 首页 · 继续学习 + 本周节奏 + 快捷入口</p></div>
+
+<!-- 2. 讲义页 -->
+<div><div class="phone"><div class="screen">
+  <div class="status"><span>9:41</span><span>📶 🔋 <span class="batt"></span></span></div>
+  <div class="top"><div class="brand">CMU11768 <span>自学站</span></div><div class="icons"><span>☰</span><span>◐</span></div></div>
+  <div class="body" style="padding:14px">
+    <div class="muted" style="font-size:12px">首页 / 学习路径 / L01</div>
+    <h2 style="margin:8px 0 4px;font-size:19px">课程导论：什么是 Agent</h2>
+    <div class="muted" style="font-size:12px">视频教案 · YT · Aug 25</div>
+    <div class="row" style="margin:10px 0;gap:8px"><span class="pill">官方</span><span class="pill ok">已读</span></div>
+    <div class="slide"><div style="aspect-ratio:16/9;background:linear-gradient(135deg,#dbeafe,#ede9fe);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted)">Slide 2 · 16 agents build Rust C compiler</div><p class="credit">CMU 11-768 课程幻灯 · 版权归原作者</p></div>
+    <div class="card"><h3>本讲速览</h3><ul class="list" style="font-size:12.5px"><li>Agent 是系统不是模型</li><li>能力在上升，边缘很糙</li><li>动作即 token</li></ul></div>
+    <div class="card"><h3>正文讲解</h3><p style="font-size:13px;margin:0">Russell & Norvig 的“感知—行动”回路在今天依然成立，只是传感器变成了文件内容、网页、截图……</p></div>
+    <div class="fab">🎓</div>
+  </div>
+  <div class="home-ind"></div>
+</div></div><p class="caption">② 讲义页 · 面包屑 + 幻灯卡片 + 正文 + 浮动课堂钮</p></div>
+
+<!-- 3. 互动课堂覆盖层 -->
+<div><div class="phone"><div class="screen">
+  <div class="status"><span>9:41</span><span>📶 🔋 <span class="batt"></span></span></div>
+  <div class="body" style="padding:0;position:relative">
+    <div class="overlay"><div class="sheet">
+      <div class="sheet-top"><div><b>L01 互动课堂</b><div class="muted" style="font-size:11px">讲→问→做→回忆 · 只存本机</div></div><span class="close">✕</span></div>
+      <div class="body" style="padding:16px">
+        <div class="steps"><span class="step done">讲 · Explain</span><span class="step cur">问 · Probe</span><span class="step">做 · Apply</span><span class="step">回忆 · Recall</span></div>
+        <div class="scene">
+          <div class="scene-hd"><span class="scene-type">🧠 追问 · 2/4</span><span class="scene-title">删邮件事故复盘</span></div>
+          <p class="scene-body">如果硬约束被压缩进 summary 就丢，harness 层该怎么兜底？想 2 条不同层面的修复。</p>
+          <button class="choice">sandbox 最小权限</button>
+          <button class="choice picked">凭证不进 context</button>
+          <button class="choice">关键操作确认</button>
+          <button class="choice">轨迹回放</button>
+          <textarea class="textarea" placeholder="写下你的答案 / 思考（只存本机）">把「不要删除」标为不可压缩约束，每轮重新注入……</textarea>
+        </div>
+        <details><summary style="font-size:13px;font-weight:700;color:var(--muted);text-align:center">▾ 本讲知识点自评（5 个）</summary>
+          <div class="kp"><span class="dot" style="background:#3b82f6"></span><div><b>sense–act 回路 / 四要素</b><small>一句话说清楚它解决什么问题？</small></div></div>
+          <div class="kp"><span class="dot" style="background:#94a3b8"></span><div><b>动作即 token</b><small>画出从输入到输出的完整链路。</small></div></div>
+        </details>
+      </div>
+      <div class="sheet-top" style="border-top:1px solid var(--border);border-bottom:none"><span class="muted" style="font-size:12px;font-weight:700">第 2 / 4 幕</span><div class="row" style="gap:8px"><button class="btn ghost" style="padding:7px 12px">← 上一幕</button><button class="btn primary" style="padding:7px 14px">下一幕 →</button></div></div>
+    </div></div>
+  </div>
+  <div class="home-ind"></div>
+</div></div><p class="caption">③ 互动课堂 · 4 幕进度 + 追问卡片 + 自评折叠</p></div>
+
+<!-- 4. 掌握度 -->
+<div><div class="phone"><div class="screen">
+  <div class="status"><span>9:41</span><span>📶 🔋 <span class="batt"></span></span></div>
+  <div class="top"><div class="brand">CMU11768 <span>自学站</span></div><div class="icons"><span>◐</span></div></div>
+  <div class="body">
+    <div class="hero"><span class="eyebrow">MASTERY</span><h2 style="font-size:18px">把「读过」变成「会用」</h2><p style="font-size:12px">自评 + 间隔复习 + 弱点清单</p></div>
+    <div class="grid4">
+      <div class="stat"><div class="n">9<span class="muted" style="font-size:11px">/28</span></div><div class="l">已自评</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">≥会用</div></div>
+      <div class="stat"><div class="n">2</div><div class="l">今日复习</div></div>
+      <div class="stat"><div class="n">6</div><div class="l">待补强</div></div>
+    </div>
+    <div class="card"><h3>各讲掌握度</h3>
+      <table class="tbl"><tr><td>L01</td><td>什么是 Agent</td><td><div class="bar"><span style="width:75%"></span></div></td><td><span class="pill ok">会用</span></td></tr>
+      <tr><td>L02</td><td>工具使用</td><td><div class="bar"><span style="width:45%"></span></div></td><td><span class="pill warn">理解</span></td></tr>
+      <tr><td>L03</td><td>长上下文</td><td><div class="bar"><span style="width:20%"></span></div></td><td><span class="pill">了解</span></td></tr></table>
+    </div>
+    <div class="card"><h3>今日复习</h3><ul class="list"><li><span>L02 · 工具描述/schema</span></li><li><span>L03 · lost-in-the-middle</span></li></ul></div>
+  </div>
+  <div class="home-ind"></div>
+</div></div><p class="caption">④ 掌握度 · 统计条 + 左表右栏（手机上堆叠）</p></div>
+
+<!-- 5. 学习路径 -->
+<div><div class="phone"><div class="screen">
+  <div class="status"><span>9:41</span><span>📶 🔋 <span class="batt"></span></span></div>
+  <div class="top"><div class="brand">CMU11768 <span>自学站</span></div><div class="icons"><span>◐</span></div></div>
+  <div class="body">
+    <div class="hero"><span class="eyebrow">LEARNING PATH</span><h2 style="font-size:18px">按目标学习</h2><p style="font-size:12px">先选路线，再完成阶段验收</p></div>
+    <div class="card"><div class="row" style="gap:6px"><span class="pill ok">系统学习</span><span class="pill">工程实践</span><span class="pill">产品与交付</span></div></div>
+    <div class="card"><div class="row between"><b>阶段 1 · 理解 Agent 的本质</b><span class="pill ok">已完成</span></div><p class="muted" style="margin:8px 0;font-size:12px">L01–L02 · 交付：四要素图 + 工具 schema</p></div>
+    <div class="card"><div class="row between"><b>阶段 2 · 掌握能力与上下文</b><span class="pill warn">进行中</span></div><p class="muted" style="margin:8px 0;font-size:12px">L03–L05 · 交付：上下文/记忆/规划取舍</p></div>
+    <div class="card"><div class="row between"><b>阶段 3 · 领域 + 训练</b><span class="pill">未开始</span></div><p class="muted" style="margin:8px 0;font-size:12px">L06–L12 · 交付：三个闭环图</p></div>
+    <div class="card"><div class="row between"><b>阶段 4 · 安全与工程化</b><span class="pill">未开始</span></div><p class="muted" style="margin:8px 0;font-size:12px">L13–L15 · 交付：上线前清单</p></div>
+  </div>
+  <div class="home-ind"></div>
+</div></div><p class="caption">⑤ 学习路径 · 三轨切换 + 阶段交付物</p></div>
+
+<!-- 6. 自测闪卡 -->
+<div><div class="phone"><div class="screen">
+  <div class="status"><span>9:41</span><span>📶 🔋 <span class="batt"></span></span></div>
+  <div class="top"><div class="brand">CMU11768 <span>自学站</span></div><div class="icons"><span>◐</span></div></div>
+  <div class="body">
+    <div class="card" style="text-align:center;padding:28px 16px"><div style="font-size:32px;margin-bottom:10px">🃏</div><b style="font-size:15px">L01 闪卡 · 3/14</b><p class="muted">点击卡片翻面</p></div>
+    <div class="card" style="min-height:140px;display:flex;align-items:center;justify-content:center;text-align:center"><div><b style="font-size:16px">harness</b><p class="muted" style="margin:8px 0">模型外的工程层：解析、校验、执行工具调用，回写 observation</p></div></div>
+    <div class="row" style="gap:10px"><button class="btn ghost" style="flex:1">← 上一张</button><button class="btn primary" style="flex:1">翻面</button><button class="btn ghost" style="flex:1">下一张 →</button></div>
+    <div class="card" style="margin-top:14px"><h3>本讲自测</h3><p class="muted" style="margin:0;font-size:12.5px">4 题选择 + 1 题简答 · 记录错题</p><button class="btn primary" style="width:100%;margin-top:10px">开始自测</button></div>
+  </div>
+  <div class="home-ind"></div>
+</div></div><p class="caption">⑥ 闪卡与自测 · 翻面 + 选择题 + 错题本</p></div>
+
+</div>
+
+<p style="margin-top:28px;color:var(--muted);font-size:13px">注：以上为布局与交互状态预览。真实 App 由 Capacitor 打包，所有数据存于本机 WKWebView localStorage，离线可用；YouTube 等外链点击跳系统浏览器。</p>
+</body></html>
