@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>互动课堂 · CMU11768 自学站</title>
+<link rel="stylesheet" href="css/site.css"/>
+<script src="js/site-shell.js"></script>
+<script src="js/app.js"></script>
+<script src="data/meta.js"></script>
+<script src="data/tutor.js"></script>
+<script src="data/classroom.js"></script>
+<script defer src="js/tutor.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  const sel=document.getElementById('lecSel');
+  const ids=SITE_META.order;
+  sel.innerHTML=ids.map(id=>`<option value="${id}">${id} · ${SITE_META.lectures[id].title}</option>`).join('');
+  const q=new URLSearchParams(location.search);const cur=q.get('lec')||ids[0];
+  sel.value=cur;go(cur);
+  sel.onchange=()=>{const u=new URL(location.href);u.searchParams.set('lec',sel.value);history.replaceState(null,'',u);go(sel.value);};
+  function go(id){const p=document.getElementById('tutorPanel');p.dataset.lecture=id;const ev=new Event('DOMContentLoaded');/* re-init targeted */const ns=TUTOR.nodes.filter(n=>n.lec===id),scenes=CLASSROOM.get(id);
+    p.innerHTML=`<div class="tutor-grid"><section class="card"><h2>知识点掌握度 <span class="badge self">自评 · 本地存储</span></h2>${ns.map(n=>{const m=TUTOR.mastery(n.id);return `<div class="kp-row"><div class="kp-label"><span class="dot" style="background:${['#94a3b8','#f59e0b','#3b82f6','#10b981','#8b5cf6'][m]}"></span><div><b>${n.label}</b><small class="muted">${TUTOR.prompts[n.kind][0]}</small></div></div><div class="kp-btns">${TUTOR.levels.map((l,i)=>`<button type="button" data-kp="${n.id}" data-lv="${i}" aria-pressed="${m===i}" title="${l}">${i===0?'○':i}</button>`).join('')}</div></div>`;}).join('')}</section><section class="card"><h2>互动课堂 <span class="badge self">OpenMAIC 式</span></h2><div id="sceneHost"></div></section></div>`;
+    p.querySelectorAll('[data-kp]').forEach(b=>b.onclick=()=>{TUTOR.setMastery(b.dataset.kp,+b.dataset.lv);go(id);});
+    let i=0;const sh=p.querySelector('#sceneHost');
+    function draw(){const s=scenes[i];if(!s){sh.innerHTML='<p class="muted">本讲课堂完成。去讲义或自测继续。</p>';return;}
+      const icons={explain:'📖',probe:'🧠',decision:'⚖️',compare:'🔁',build:'🛠',recall:'✅'};
+      sh.innerHTML=`<div class="scene"><div class="scene-hd"><span>${icons[s.type]||'•'} ${s.type.toUpperCase()} ${i+1}/${scenes.length}</span><b>${s.title}</b></div><p>${s.body}</p>
+      ${s.options?`<div class="choice-row">${s.options.map(o=>`<button type="button" class="choice">${o}</button>`).join('')}</div><div class="answer muted" hidden>${s.answer?s.answer:''}</div>`:''}
+      <textarea class="scene-note" placeholder="写下你的答案/思考，会存在本地。"></textarea>
+      <div class="scene-nav"><button type="button" id="prevS" ${i===0?'disabled':''}>← 上一幕</button><button type="button" id="nextS">${i===scenes.length-1?'完成本讲':'下一幕 →'}</button></div></div>`;
+      sh.querySelectorAll('.choice').forEach(c=>c.onclick=()=>{sh.querySelector('.answer').hidden=false;c.style.outline='2px solid var(--brand)';});
+      const ta=sh.querySelector('.scene-note');const k=`note:${id}:${i}`;try{ta.value=localStorage.getItem(k)||'';}catch(e){}
+      ta.oninput=()=>{try{localStorage.setItem(k,ta.value);}catch(e){}};
+      sh.querySelector('#prevS').onclick=()=>{i=Math.max(0,i-1);draw();};
+      sh.querySelector('#nextS').onclick=()=>{i=Math.min(scenes.length,i+1);draw();};
+    }
+    draw();
+  }
+});
+</script>
+</head>
+<body>
+<a class="skip-link" href="#mainContent">跳到主要内容</a>
+<header class="topbar"></header>
+<div class="layout">
+<main class="main" id="mainContent">
+<section class="hero"><span class="eyebrow">CLASSROOM / 本站自编互动层</span><h1>像 OpenMAIC 那样上课：<br>讲 → 问 → 做 → 回忆。</h1><p>每讲 4 幕：先讲清、再追问、后决策/动手、最后一句话带走。你的回答和掌握度只存本地。</p></section>
+<div class="classroom-banner"><label for="lecSel"><b>选择讲次</b></label><select id="lecSel" style="padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text)"></select><div class="actions"><a class="btn ghost" href="mastery.html">掌握度 →</a><a class="btn ghost" href="progress.html">进度 →</a></div></div>
+<div id="tutorPanel"></div>
+</main></div>
+</body></html>

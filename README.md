@@ -34,3 +34,14 @@ python -m http.server 8765
 - 版权归原作者 / 授课方（CMU 11-768 / Daniel Fried / Graham Neubig）。
 - 每张配图附信用语「CMU 11-768 课程幻灯 · 版权归原作者」，并链回官方 slides PDF。
 - 请勿二次分发为商业素材；如需正式课件请以官方渠道为准。
+## OpenMAIC / DeepTutor 思路补充（2026-11-17）
+
+新增三个模块，全部本地存储，无需 Docker：
+
+- `classroom.html` — 互动课堂：每讲 4 幕（讲→问→做→回忆），借鉴 OpenMAIC 的课堂节奏；可切换讲次，作答与选择存 localStorage。
+- `mastery.html` — 掌握度面板：28 个知识点按讲分组，0-4 级自评，间隔复习（1/3/7/21 天）与待补强清单，借鉴 DeepTutor 的 mastery path。
+- `notion-pack/` — 15 讲 Markdown 补充页 + `plan.md` 总览，可直接复制/导入 Notion；每讲含互动课堂脚本、知识点自评表、引导问题、复习待办。
+
+数据文件：`data/tutor.js`（知识点图谱 + 掌握度模型）、`data/classroom.js`（课堂场景）。导航已加入「互动课堂」「掌握度」。
+
+未运行 OpenMAIC / DeepTutor 本体：本机无 Docker，本模块仅借鉴其产品逻辑，在静态站内实现等效学习闭环。

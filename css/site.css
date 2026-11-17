@@ -310,3 +310,40 @@ a:hover{text-decoration:underline}
   .pager{flex-direction:column}
   .graph{height:560px}
 }
+/* Tutor / classroom / mastery additions (OpenMAIC + DeepTutor inspired) */
+.tutor-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-top:16px}
+@media(max-width:900px){.tutor-grid{grid-template-columns:1fr}}
+.kp-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.kp-row:last-child{border-bottom:none}
+.kp-label{display:flex;gap:8px;align-items:flex-start;min-width:0}
+.kp-label b{display:block}
+.kp-label small{display:block;font-weight:400;line-height:1.4}
+.dot{display:inline-block;width:10px;height:10px;border-radius:999px;margin-top:5px;flex:none}
+.kp-btns{display:flex;gap:4px;flex:none}
+.kp-btns button{width:26px;height:26px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);cursor:pointer;font-size:12px}
+.kp-btns button[aria-pressed="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+.scene{border:1px solid var(--border);border-radius:12px;padding:14px;background:var(--bg)}
+.scene-hd{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:13px;color:var(--muted)}
+.scene-hd b{color:var(--text)}
+.choice-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.choice{padding:6px 12px;border-radius:999px;border:1px solid var(--border);background:var(--bg2);color:var(--text);cursor:pointer}
+.answer{margin:8px 0;padding:8px 10px;background:rgba(16,185,129,.08);border-radius:8px}
+.scene-note{width:100%;min-height:70px;margin-top:8px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text);font:inherit}
+.scene-nav{display:flex;justify-content:space-between;margin-top:10px}
+.scene-nav button{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);cursor:pointer}
+.scene-nav button:disabled{opacity:.4;cursor:default}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th,.tbl td{padding:8px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+.bar{height:8px;border-radius:999px;background:var(--border);overflow:hidden;min-width:80px}
+.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:16px}
+.plan-w{font-size:12px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.08em}
+.plan-ids{margin:8px 0;padding-left:18px}
+.plan-ids li{margin:4px 0}
+.ok{color:var(--ok);font-size:12px;font-weight:700}
+.classroom-banner{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:linear-gradient(90deg,rgba(124,58,237,.08),rgba(37,99,235,.08));margin:14px 0}
+.classroom-banner .actions{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:600;cursor:pointer}
+.btn:hover{text-decoration:none;opacity:.92}
+.btn.ghost{background:var(--bg2);color:var(--brand)}
+.review-chip{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;border-radius:999px;background:var(--chip);color:var(--chip-t);font-size:12px;font-weight:700}

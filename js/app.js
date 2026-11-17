@@ -85,7 +85,12 @@
       nav.setAttribute('aria-label','面包屑');
       nav.innerHTML='<a href="../index.html">首页</a><span class="sep">/</span><a href="../learning-path.html">学习路径</a><span class="sep">/</span><span>'+id+'</span>';
       main.insertBefore(nav, main.firstChild);
+    }    if(!main.querySelector('.classroom-banner')){
+      const bar=document.createElement('div');bar.className='classroom-banner';
+      bar.innerHTML='<div><b>互动课堂：</b>用 OpenMAIC 式四幕（讲→问→做→回忆）过一遍本讲，顺手给知识点打分。</div><a class="btn" href="../classroom.html?lec='+id+'">进入本讲课堂 →</a>';
+      const crumbs=main.querySelector('.crumbs');crumbs?crumbs.after(bar):main.insertBefore(bar,main.firstChild);
     }
+
     if(!document.getElementById('lecturePagerEnd')){
       const pager=document.createElement('nav');pager.className='pager';pager.id='lecturePagerEnd';pager.setAttribute('aria-label','上一讲下一讲');pager.innerHTML=pagerHtml(id);main.appendChild(pager);
     }
