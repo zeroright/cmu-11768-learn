@@ -12,7 +12,16 @@
     const top=document.querySelector('.topbar');
     function link([p,label],active){return `<a href="${root+p}"${active?' class="active" aria-current="page"':''}>${label}</a>`;}
     if(top){
-      top.innerHTML=`${lecture?'<button class="iconbtn mobile-toggle" id="sidebarToggle" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="打开讲次目录">☰</button>':''}<a class="brand" href="${root}index.html">CMU11768 <span>自学站</span></a><nav class="nav" aria-label="全站导航">${primary.map((entry,i)=>link(entry,i===0?file==='index.html'&&!location.hash:i===2?lecture||(file==='index.html'&&!!location.hash):i===3?inPractice:entry[0]===file)).join('')}</nav><details class="resource-menu"${inResources?' data-active="true"':''}><summary>资源</summary><nav aria-label="参考资源">${resources.map(entry=>link(entry,entry[0]===file)).join('')}</nav></details><button class="iconbtn" id="themeToggle" type="button" aria-label="切换明暗主题" title="切换明暗主题">◐</button>`;
+      const cur=(i,entry)=>{
+        if(i===0) return file==='index.html'&&!location.hash;
+        if(i===1) return file==='learning-path.html';
+        if(i===2) return file==='classroom.html'||lecture;
+        if(i===3) return file==='index.html'&&!!location.hash||lecture;
+        if(i===4) return inPractice;
+        if(i===5) return file==='progress.html';
+        return entry===file;
+      };
+      top.innerHTML=`${lecture?'<button class="iconbtn mobile-toggle" id="sidebarToggle" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="打开讲次目录">☰</button>':''}<a class="brand" href="${root}index.html">CMU11768 <span>自学站</span></a><nav class="nav" aria-label="全站导航">${primary.map((entry,i)=>link(entry,cur(i,entry[0]))).join('')}</nav><details class="resource-menu"${inResources?' data-active="true"':''}><summary>资源</summary><nav aria-label="参考资源">${resources.map(entry=>link(entry,entry[0]===file)).join('')}</nav></details><button class="iconbtn" id="themeToggle" type="button" aria-label="切换明暗主题" title="切换明暗主题">◐</button>`;
     }
     const layout=document.querySelector('.layout'),main=document.querySelector('main');
     if(main&&!main.id)main.id='mainContent';
