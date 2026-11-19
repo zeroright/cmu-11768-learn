@@ -1,0 +1,34 @@
+/* 论文精读页内嵌图示 */
+.viz-block{margin:18px 0;padding:16px;border:1px solid var(--border);border-radius:12px;background:var(--bg2)}
+.viz-block .viz-cap{font-size:12px;color:var(--muted);margin-top:8px;text-align:center}
+.viz-block svg{width:100%;height:auto;display:block}
+.viz-svg-axis{stroke:#94a3b8;stroke-width:1.5;fill:none}
+.viz-svg-label{fill:var(--muted);font-size:11px;font-family:system-ui,sans-serif}
+.viz-svg-title{fill:var(--text);font-size:12px;font-weight:600;font-family:system-ui,sans-serif}
+.viz-svg-node{fill:var(--bg);stroke:var(--border);stroke-width:1;rx:8}
+.viz-svg-node-active{fill:#dbeafe;stroke:#2563eb;stroke-width:1.5}
+.viz-svg-node-ok{fill:#d1fae5;stroke:#059669;stroke-width:1.5}
+.viz-svg-node-warn{fill:#fef3c7;stroke:#d97706;stroke-width:1.5}
+.viz-svg-node-bad{fill:#fee2e2;stroke:#dc2626;stroke-width:1.5}
+.viz-svg-edge{stroke:#94a3b8;stroke-width:1.5;fill:none;marker-end:url(#vizArrow)}
+.viz-svg-line-a{stroke:#2563eb;stroke-width:2.5;fill:none}
+.viz-svg-line-b{stroke:#059669;stroke-width:2.5;fill:none}
+.viz-svg-line-c{stroke:#d97706;stroke-width:2.5;fill:none}
+.viz-svg-line-d{stroke:#dc2626;stroke-width:2.5;fill:none}
+.viz-svg-dash{stroke-dasharray:5 3}
+.viz-svg-dot-a{fill:#7c3aed}
+.viz-svg-dot-b{fill:#059669}
+.viz-svg-dot-c{fill:#d97706}
+.viz-svg-fill-a{fill:#dbeafe;opacity:.7}
+.viz-svg-fill-b{fill:#d1fae5;opacity:.7}
+.viz-svg-fill-c{fill:#fef3c7;opacity:.7}
+.viz-svg-fill-d{fill:#fee2e2;opacity:.7}
+.viz-svg-grid{stroke:#e2e6ef;stroke-width:1;stroke-dasharray:2 3}
+.viz-ctrl{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:10px;font-size:13px}
+.viz-ctrl label{display:flex;align-items:center;gap:6px}
+.viz-ctrl input[type=range]{width:120px}
+.viz-ctrl output{min-width:36px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:var(--brand)}
+[data-theme=dark] .viz-svg-node{fill:#151c2f;stroke:#334155}
+[data-theme=dark] .viz-svg-axis{stroke:#64748b}
+[data-theme=dark] .viz-svg-line-a{stroke:#60a5fa}
+[data-theme=dark] .viz-svg-line-b{stroke:#34d399}

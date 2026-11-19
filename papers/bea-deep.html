@@ -3,7 +3,7 @@
 <title>Building Effective Agents 深度精读：Anthropic 的工程经验</title>
 <link rel="stylesheet" href="../vendor/katex/katex.min.css"/><link rel="stylesheet" href="../css/site.css"/>
 <script src="../vendor/marked.min.js"></script><script src="../js/site-shell.js"></script><script src="../js/app.js"></script>
-<script src="../data/meta.js"></script><link rel="stylesheet" href="../css/learning.css"/></head>
+<script src="../data/meta.js"></script><link rel="stylesheet" href="../css/learning.css"/><link rel="stylesheet" href="viz.css"/></head>
 <body><a class="skip-link" href="#mainContent">跳到主要内容</a><header class="topbar"></header>
 <div class="layout"><main class="main" id="mainContent">
 <section class="hero"><span class="eyebrow">论文精读 · L15</span><h1>Building Effective Agents 深度精读：Anthropic 的工程经验</h1><p class="muted">Anthropic Engineering, Dec 2024</p></section>
@@ -12,6 +12,23 @@
 <section class="section"><h2>autonomous agent 何时才需要</h2><p>当任务真的无法预知下一步（如开放探索、长程问题、多轮交互），才需要 agent。Anthropic 建议：(1) 用「agent loop = LLM + tool + env」的最小骨架；(2) 让 env 提供清晰反馈；(3) 让模型能停止；(4) 给监控留好 hook。</p></section>
 <section class="section"><h2>工程细节</h2><p>文档建议关注 tool design（简单清晰 > 强大复杂）、error message（让错误可读）、budget guardrail（不要无界循环）、human oversight（关键决策人介入）。这些细节决定了 agent 能不能生产化。</p></section>
 <section class="section"><h2>对 L15 编排监控的连接</h2><p>workflow 模式对应 LangGraph/状态机；agent 部分对应 L14 OpenHands；监控部分对应 L15 Hodoscope/Docent。Building Effective Agents 是把三者连起来的工程总纲。</p></section>
+<section class="section"><h2>附 · Workflow vs Agent 决策树</h2>
+<div class="viz-block">
+  <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg">
+    <rect x="260" y="20" width="200" height="50" class="viz-svg-node"/><text x="360" y="50" text-anchor="middle" class="viz-svg-title">任务能用确定流程表示吗？</text>
+    <path d="M360 70 L200 100 L200 115" class="viz-svg-edge"/><path d="M360 70 L520 100 L520 115" class="viz-svg-edge"/>
+    <text x="260" y="100" text-anchor="middle" class="viz-svg-label">YES</text><text x="460" y="100" text-anchor="middle" class="viz-svg-label">NO</text>
+    <rect x="100" y="115" width="200" height="50" class="viz-svg-node viz-svg-node-ok"/><text x="200" y="135" text-anchor="middle" class="viz-svg-title">用 Workflow</text><text x="200" y="152" text-anchor="middle" class="viz-svg-label">确定性链路即可</text>
+    <rect x="420" y="115" width="200" height="50" class="viz-svg-node viz-svg-node-warn"/><text x="520" y="135" text-anchor="middle" class="viz-svg-title">用 Agent</text><text x="520" y="152" text-anchor="middle" class="viz-svg-label">自主决策下一步</text>
+    <rect x="50" y="200" width="300" height="40" class="viz-svg-node"/><text x="200" y="220" text-anchor="middle" class="viz-svg-title">5 种 workflow 模式</text>
+    <text x="200" y="235" text-anchor="middle" class="viz-svg-label">prompt chaining / routing / parallel / orch-workers / eval-opt</text>
+    <rect x="370" y="200" width="300" height="40" class="viz-svg-node viz-svg-node-bad"/><text x="520" y="220" text-anchor="middle" class="viz-svg-title">agent 骨架</text>
+    <text x="520" y="235" text-anchor="middle" class="viz-svg-label">LLM + tool + env + 停止条件 + 监控 hook</text>
+    <text x="360" y="285" text-anchor="middle" class="viz-svg-label">Anthropic 原则：能用 workflow 就不用 agent；agent 是「workflow 撑不起来时的最后手段」</text>
+  </svg>
+  <p class="viz-cap">先 workflow 后 agent；agent 的核心是 LLM + tool + env + 可控停止。</p>
+</div>
+</section>
 <section class="section"><h2>怎么读它</h2><p>这是工业界最有影响力的 agent 工程文。读它不要记「workflow vs agent」的术语，要记「先 workflow，后 agent，agent 留 human oversight」的取舍逻辑。</p></section>
 
 <p class="muted" style="margin-top:2rem"><a href="../papers.html">← 返回论文库</a></p>

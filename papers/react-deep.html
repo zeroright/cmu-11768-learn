@@ -3,7 +3,7 @@
 <title>ReAct 深度精读：语言模型如何边想边做</title>
 <link rel="stylesheet" href="../vendor/katex/katex.min.css"/><link rel="stylesheet" href="../css/site.css"/>
 <script src="../vendor/marked.min.js"></script><script src="../js/site-shell.js"></script><script src="../js/app.js"></script>
-<script src="../data/meta.js"></script><link rel="stylesheet" href="../css/learning.css"/></head>
+<script src="../data/meta.js"></script><link rel="stylesheet" href="../css/learning.css"/><link rel="stylesheet" href="viz.css"/></head>
 <body><a class="skip-link" href="#mainContent">跳到主要内容</a><header class="topbar"></header>
 <div class="layout"><main class="main" id="mainContent">
 <section class="hero"><span class="eyebrow">论文精读 · L01</span><h1>ReAct 深度精读：语言模型如何边想边做</h1><p class="muted">Yao et al., ICLR 2023 · arXiv 2210.03629</p></section>
@@ -12,6 +12,39 @@
 <section class="section"><h2>实验：在 HotpotQA 与 FEVER 上的对比</h2><p>ReAct vs 纯 CoT vs 纯 Act（只动作不思考）：ReAct 显著领先，特别是在需要多跳推理的问题上；但「绝对性能」仍依赖工具返回质量。一个反直觉的发现是，ReAct 的 hallucination 比 CoT 更少——因为它把推理建立在真实的工具返回上，而不是纯靠 parametric knowledge。</p></section>
 <section class="section"><h2>ALFWorld 与 WebShop：从文本到具身</h2><p>论文还把 ReAct 用在文字冒险游戏（ALFWorld）和网购模拟（WebShop）上，分别比模仿学习/RL 基线提升 34% 和 10%。这证明 ReAct 不仅是 QA 的提示技巧，而是通用的 agent 决策骨架。</p></section>
 <section class="section"><h2>局限与今天的边界</h2><p>ReAct 的成功前提是：(1) 工具返回是文本、可进 prompt；(2) 单轨迹、无回溯；(3) 靠 in-context learning 而不是训练。今天的 ReAct 衍生（如 Plan-and-Execute、Reflexion、LATS）分别在「计划显式化」「失败反思」「搜索树扩展」三个维度扩展它，但底层骨架仍然是 Thought-Action-Observation。</p></section>
+<section class="section"><h2>附 · ReAct 循环示意（交互）</h2>
+<div class="viz-block">
+  <div class="viz-ctrl">
+    <button class="btn secondary" id="reactStep">执行下一步</button>
+    <button class="btn secondary" id="reactReset">重置</button>
+    <output id="reactOut" style="margin-left:auto"></output>
+  </div>
+  <svg viewBox="0 0 720 260" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="vizArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#94a3b8"/></marker></defs>
+    <rect x="20" y="20" width="150" height="60" class="viz-svg-node" id="rT"/><text x="95" y="45" text-anchor="middle" class="viz-svg-title">Thought</text><text x="95" y="62" text-anchor="middle" class="viz-svg-label">想下一步</text>
+    <rect x="290" y="20" width="150" height="60" class="viz-svg-node" id="rA"/><text x="365" y="45" text-anchor="middle" class="viz-svg-title">Action</text><text x="365" y="62" text-anchor="middle" class="viz-svg-label">调工具</text>
+    <rect x="560" y="20" width="150" height="60" class="viz-svg-node" id="rO"/><text x="635" y="45" text-anchor="middle" class="viz-svg-title">Observation</text><text x="635" y="62" text-anchor="middle" class="viz-svg-label">工具返回</text>
+    <path d="M170 50 L285 50" class="viz-svg-edge"/><path d="M440 50 L555 50" class="viz-svg-edge"/>
+    <path d="M635 80 Q635 130 365 130 Q95 130 95 80" class="viz-svg-edge"/>
+    <text x="365" y="125" text-anchor="middle" class="viz-svg-label">反馈进下一轮</text>
+    <rect x="290" y="180" width="150" height="60" class="viz-svg-node" id="rF"/><text x="365" y="205" text-anchor="middle" class="viz-svg-title">Finish</text><text x="365" y="222" text-anchor="middle" class="viz-svg-label">停</text>
+    <path d="M365 80 L365 175" class="viz-svg-edge viz-svg-dash"/>
+    <text id="reactStatus" x="360" y="155" text-anchor="middle" class="viz-svg-title">等待执行</text>
+  </svg>
+  <p class="viz-cap">点击「执行下一步」步进 Thought→Action→Observation→下一 Thought（或 Finish）。</p>
+</div>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  var steps=['Thought: 需要订单金额','Action: lookup_order[A17]','Observation: amount=1200','Thought: 已够','Action: finish[answer]','Finish: 订单 A17 = 1200 元'];
+  var nodes=['rT','rA','rO','rT','rA','rF'];var i=0;
+  var out=document.getElementById('reactOut'),st=document.getElementById('reactStatus');
+  function draw(){['rT','rA','rO','rF'].forEach(id=>document.getElementById(id).classList.remove('viz-svg-node-active'));if(i>0)document.getElementById(nodes[i-1]).classList.add('viz-svg-node-active');out.textContent=i+'/'+steps.length;st.textContent=i===0?'等待执行':steps[i-1];}
+  document.getElementById('reactStep').onclick=()=>{if(i<steps.length){i++;draw();}};
+  document.getElementById('reactReset').onclick=()=>{i=0;draw();};
+  draw();
+});
+</script>
 <section class="section"><h2>怎么读它</h2><p>如果你只读一篇 agent 论文，读 ReAct。它的贡献不是某个具体算法，而是给出了一个能写进任何系统的『通用 agent 循环』。读它时关注三件事：Action 是怎么定义的？Observation 怎么进 prompt？失败时怎么重试？</p></section>
 
 <p class="muted" style="margin-top:2rem"><a href="../papers.html">← 返回论文库</a></p>

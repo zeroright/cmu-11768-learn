@@ -3,7 +3,7 @@
 <title>GRPO / DeepSeekMath 深度精读：组内相对优势</title>
 <link rel="stylesheet" href="../vendor/katex/katex.min.css"/><link rel="stylesheet" href="../css/site.css"/>
 <script src="../vendor/marked.min.js"></script><script src="../js/site-shell.js"></script><script src="../js/app.js"></script>
-<script src="../data/meta.js"></script><link rel="stylesheet" href="../css/learning.css"/></head>
+<script src="../data/meta.js"></script><link rel="stylesheet" href="../css/learning.css"/><link rel="stylesheet" href="viz.css"/></head>
 <body><a class="skip-link" href="#mainContent">跳到主要内容</a><header class="topbar"></header>
 <div class="layout"><main class="main" id="mainContent">
 <section class="hero"><span class="eyebrow">论文精读 · L09 / L11</span><h1>GRPO / DeepSeekMath 深度精读：组内相对优势</h1><p class="muted">Shao et al., 2024 · arXiv 2402.03300</p></section>
@@ -12,6 +12,46 @@
 <section class="section"><h2>为什么对 agent 任务更友好</h2><p>agent 任务的 reward 通常只在轨迹末端给 0/1（任务成败），传统 PPO 的 critic 很难学准「这一 step 值多少」。GRPO 跳过 step-level 信用分配，用「整组里我这个轨迹是不是更好」作为信号，反而更适合长 trajectory + 稀疏 reward。</p></section>
 <section class="section"><h2>DAPO/GSPO 的工程修正</h2><p>GRPO 的原始版本在长 CoT 上不稳：一是 group 内全 0 或全 1 reward 时 advantage 全 0；二是 token-level IS 比在长链路上误差累积。DAPO 用 dynamic sampling 剔除无效组 + token-level loss + 过长惩罚；GSPO 换成 sequence-level importance sampling。</p></section>
 <section class="section"><h2>实践要点</h2><p>1) group size 不能太小（一般 ≥8），否则 advantage 估计噪声大；2) 需要 rejection sampling 或 rejection-aware 采样，保证组里有 reward 变化；3) reward 设计决定一切——用可验证规则（测试通过/答案正确）比 generative RM 稳得多；4) MoE 模型要警惕 rollout 中 expert 路由不一致导致的隐性 off-policy（R3 论文专门讨论）。</p></section>
+<section class="section"><h2>附 · GRPO 组内相对优势（交互）</h2>
+<div class="viz-block">
+  <div class="viz-ctrl">
+    <label>r1 <input type="range" id="g1" min="0" max="1" step="0.1" value="0"><output id="g1v">0.0</output></label>
+    <label>r2 <input type="range" id="g2" min="0" max="1" step="0.1" value="0"><output id="g2v">0.0</output></label>
+    <label>r3 <input type="range" id="g3" min="0" max="1" step="0.1" value="1"><output id="g3v">1.0</output></label>
+    <label>r4 <input type="range" id="g4" min="0" max="1" step="0.1" value="1"><output id="g4v">1.0</output></label>
+    <button class="btn secondary" id="gSame">全 0.5</button>
+  </div>
+  <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+    <line x1="60" y1="160" x2="680" y2="160" class="viz-svg-axis"/><line x1="60" y1="20" x2="60" y2="160" class="viz-svg-axis"/>
+    <text x="370" y="195" text-anchor="middle" class="viz-svg-label">样本</text><text x="14" y="90" transform="rotate(-90 14 90)" class="viz-svg-label">advantage</text>
+    <line x1="60" y1="90" x2="680" y2="90" class="viz-svg-grid"/><text x="52" y="94" text-anchor="end" class="viz-svg-label">0</text>
+    <g id="gBars"></g>
+    <text id="gStatus" x="370" y="15" text-anchor="middle" class="viz-svg-title"></text>
+  </svg>
+  <p class="viz-cap">拖动每个样本 reward：A_i = (r_i − mean) / std；全相同则无信号。</p>
+</div>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  var ids=['g1','g2','g3','g4'];
+  function read(){return ids.map(i=>+document.getElementById(i).value);}
+  function adv(rs){var m=rs.reduce((a,b)=>a+b,0)/rs.length;var sd=Math.sqrt(rs.reduce((s,r)=>s+(r-m)**2,0)/rs.length)||1e-6;return rs.map(r=>(r-m)/sd);}
+  function draw(){
+    var rs=read(),a=adv(rs),bars=document.getElementById('gBars');
+    ids.forEach((id,i)=>document.getElementById(id+'v').textContent=(+document.getElementById(id).value).toFixed(1));
+    var W=140,GAP=30,x0=90,scale=60,mid=90;
+    bars.innerHTML=rs.map((r,i)=>{
+      var v=a[i],x=x0+i*(W+GAP),h=Math.abs(v)*scale,y=v>0?mid-h:mid;
+      var cls=v>0.01?'viz-svg-fill-b':(v<-0.01?'viz-svg-fill-d':'viz-svg-fill-a');
+      return '<rect x="'+x+'" y="'+y+'" width="'+W+'" height="'+h+'" class="'+cls+'"/><text x="'+(x+W/2)+'" y="'+(v>0?y-6:y+h+14)+'" text-anchor="middle" class="viz-svg-label">A='+v.toFixed(2)+'</text><text x="'+(x+W/2)+'" y="180" text-anchor="middle" class="viz-svg-label">样本'+(i+1)+' (r='+r.toFixed(1)+')</text>';
+    }).join('');
+    document.getElementById('gStatus').textContent='rewards: ['+rs.map(r=>r.toFixed(1)).join(', ')+'] · mean='+(rs.reduce((s,r)=>s+r,0)/4).toFixed(2);
+  }
+  ids.forEach(id=>document.getElementById(id).oninput=draw);
+  document.getElementById('gSame').onclick=()=>{ids.forEach(i=>document.getElementById(i).value='0.5');draw();};
+  draw();
+});
+</script>
 <section class="section"><h2>怎么读它</h2><p>先懂「组内相对」四个字，再去推公式。它和 PPO 的差别不是「性能更高」，而是「简化到能跑得动」。读的时候对照 L11 的 DAPO/GSPO 修正一起看，能理解工程取舍。</p></section>
 
 <p class="muted" style="margin-top:2rem"><a href="../papers.html">← 返回论文库</a></p>

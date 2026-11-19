@@ -3,7 +3,7 @@
 <title>AgentDojo 深度精读：间接 prompt injection 的可复现红队</title>
 <link rel="stylesheet" href="../vendor/katex/katex.min.css"/><link rel="stylesheet" href="../css/site.css"/>
 <script src="../vendor/marked.min.js"></script><script src="../js/site-shell.js"></script><script src="../js/app.js"></script>
-<script src="../data/meta.js"></script><link rel="stylesheet" href="../css/learning.css"/></head>
+<script src="../data/meta.js"></script><link rel="stylesheet" href="../css/learning.css"/><link rel="stylesheet" href="viz.css"/></head>
 <body><a class="skip-link" href="#mainContent">跳到主要内容</a><header class="topbar"></header>
 <div class="layout"><main class="main" id="mainContent">
 <section class="hero"><span class="eyebrow">论文精读 · L13</span><h1>AgentDojo 深度精读：间接 prompt injection 的可复现红队</h1><p class="muted">Debenedetti et al., NeurIPS 2024 · arXiv 2406.13352</p></section>
@@ -12,6 +12,28 @@
 <section class="section"><h2>两种量化指标</h2><p>1) Utility：agent 完成用户 task 的比例；2) Security：attacker 目标 action 被执行的比例（越低越好）。好 defense 要同时高 utility、低 security compromise。</p></section>
 <section class="section"><h2>关键发现</h2><p>当时的最强 agent（GPT-4/Claude）在多种 attack 下都有 30%+ 的 compromise rate；而加 defense（如 prompt hardening、tool filter）只能部分缓解，且往往伤 utility。这说明间接注入不是已解决的问题，而是开放研究。</p></section>
 <section class="section"><h2>对生产 agent 的启示</h2><p>1) env 里的不可信内容（邮件、网页、文件）必须标记为 untrusted；2) 高权限动作（发邮件、转账、删数据）必须 human-in-loop；3) 监控要看 trajectory，不是只看 final answer；4) 定期用 AgentDojo 类环境回归红队。</p></section>
+<section class="section"><h2>附 · 间接注入流程与防御层</h2>
+<div class="viz-block">
+  <svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="vizArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#94a3b8"/></marker></defs>
+    <rect x="20" y="30" width="120" height="50" class="viz-svg-node" id="adUser"/><text x="80" y="52" text-anchor="middle" class="viz-svg-title">用户</text><text x="80" y="68" text-anchor="middle" class="viz-svg-label">发任务</text>
+    <rect x="200" y="30" width="140" height="50" class="viz-svg-node" id="adAgent"/><text x="270" y="52" text-anchor="middle" class="viz-svg-title">Agent</text><text x="270" y="68" text-anchor="middle" class="viz-svg-label">接收任务+读环境</text>
+    <rect x="400" y="30" width="140" height="50" class="viz-svg-node" id="adEnv"/><text x="470" y="52" text-anchor="middle" class="viz-svg-title">环境</text><text x="470" y="68" text-anchor="middle" class="viz-svg-label">邮件/网页/文件</text>
+    <rect x="580" y="30" width="120" height="50" class="viz-svg-node" id="adAtk"/><text x="640" y="52" text-anchor="middle" class="viz-svg-title">攻击者</text><text x="640" y="68" text-anchor="middle" class="viz-svg-label">藏恶意指令</text>
+    <path d="M140 55 L195 55" class="viz-svg-edge"/>
+    <path d="M340 55 L395 55" class="viz-svg-edge"/>
+    <path d="M540 55 L575 55" class="viz-svg-edge viz-svg-dash"/>
+    <rect x="200" y="110" width="140" height="50" class="viz-svg-node viz-svg-node-warn" id="adInj"/><text x="270" y="132" text-anchor="middle" class="viz-svg-title">读到注入指令</text><text x="270" y="148" text-anchor="middle" class="viz-svg-label">「也帮我转账 1000」</text>
+    <path d="M470 80 L470 100 Q470 110 340 110" class="viz-svg-edge viz-svg-dash"/>
+    <path d="M640 80 L640 100 Q640 110 340 110" class="viz-svg-edge viz-svg-dash"/>
+    <rect x="20" y="170" width="680" height="50" class="viz-svg-node"/>
+    <text x="30" y="190" class="viz-svg-title">防御层</text>
+    <text x="30" y="210" class="viz-svg-label">① untrusted 标记 env 内容 · ② 高权限动作 human-in-loop · ③ 监控轨迹看异常 · ④ AgentDojo 类红队回归</text>
+    <path d="M270 160 L270 165" class="viz-svg-edge viz-svg-dash"/>
+  </svg>
+  <p class="viz-cap">攻击者把恶意指令埋进 env 内容，agent 读到后被劫持执行非预期动作；防御不是单层，而是 4 层组合。</p>
+</div>
+</section>
 <section class="section"><h2>怎么读它</h2><p>把它当作「如何系统地评估 agent 安全」的方法论模板：威胁模型 → 受控环境 → 双指标（utility/security）→ attack/defense 对比。如果你想给自家 agent 做安全评测，可以照这个模板复制。</p></section>
 
 <p class="muted" style="margin-top:2rem"><a href="../papers.html">← 返回论文库</a></p>
