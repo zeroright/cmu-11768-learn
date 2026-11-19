@@ -1,9 +1,9 @@
 /* Shared navigation and layout. Each destination has one place in its own navigation level. */
 (function(){
   'use strict';
-  const primary=[['index.html','学习总览'],['learning-path.html','学习路径'],['classroom.html','互动课堂'],['index.html#videos','课程目录'],['homework.html','实践中心'],['progress.html','学习进度']];
+  const primary=[['index.html','学习总览'],['learning-path.html','学习路径'],['index.html#videos','课程目录'],['homework.html','实践中心'],['progress.html','学习进度']];
   const practice=[['homework.html','官方作业'],['assignments.html','综合项目'],['learning-lab.html','机制实验'],['playground.html','代码运行'],['code-compare.html','源码对照']];
-  const resources=[['papers.html','论文库'],['glossary.html','术语表'],['mastery.html','掌握度'],['search.html','全文搜索']];
+  const resources=[['papers.html','论文库'],['glossary.html','术语表'],['search.html','全文搜索']];
   const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   window.CMU11768_SHELL={primary,practice,resources};
   function init(){
